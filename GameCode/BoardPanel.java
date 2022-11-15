@@ -3,9 +3,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.util.ArrayList;
-
-//testlskdfjalksdjflaksdjlfkajsdlkfjalskdjf
-
 import PieceCode.Piece;
 
 public class BoardPanel extends JPanel implements MouseListener, MouseMotionListener
@@ -217,6 +214,8 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
 
                     board[j][i] = new Piece(null, board[j][i].position, board[j][i].dimensions);
 
+                    checkPawnPromotion(indexes, board[indexes.x][indexes.y]);
+
                     switchCurrentPlayer();
 
                     return;
@@ -232,46 +231,8 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         board[indexes.x][indexes.y].isClicked = true;
     }
 
-    private void checkSpecialMove(Point indexes, Piece piece)
-    {
-        //en passant
-        if(piece.pieceType.equalsIgnoreCase("p") && indexes.y == 2 && board[indexes.x][indexes.y].piece == null && board[indexes.x][indexes.y + 1].piece != null && board[indexes.x][indexes.y + 1].color.equalsIgnoreCase("b") && board[indexes.x][indexes.y + 1].pieceType.equalsIgnoreCase("p") && board[indexes.x][indexes.y + 1].amountMoved < 2)
-        {
-            board[indexes.x][indexes.y + 1] = new Piece(null, board[indexes.x][indexes.y + 1].position, board[indexes.x][indexes.y + 1].dimensions);
-        }
-
-        if(piece.pieceType.equalsIgnoreCase("p") && indexes.y == 5 && board[indexes.x][indexes.y].piece == null && board[indexes.x][indexes.y - 1].piece != null && board[indexes.x][indexes.y - 1].color.equalsIgnoreCase("w") && board[indexes.x][indexes.y - 1].pieceType.equalsIgnoreCase("p") && board[indexes.x][indexes.y - 1].amountMoved < 2)
-        {
-            board[indexes.x][indexes.y - 1] = new Piece(null, board[indexes.x][indexes.y - 1].position, board[indexes.x][indexes.y - 1].dimensions);
-        }
-
-        //short castle
-        if(piece.pieceType.equalsIgnoreCase("k") && indexes.x == board[0].length - 2 && indexes.y == board.length - 1)
-        {
-            board[indexes.x - 1][indexes.y] = new Piece(new Point((indexes.x - 1) * board[board[0].length - 1][board.length - 1].dimensions, indexes.y * board[board[0].length - 1][board.length - 1].dimensions), board[board[0].length - 1][board.length - 1].piece, board[board[0].length - 1][board.length - 1].dimensions, board[board[0].length - 1][board.length - 1].color, board[board[0].length - 1][board.length - 1].pieceType);
-            board[board[0].length - 1][board.length - 1] = new Piece(null, board[board[0].length - 1][board.length - 1].position, board[board[0].length - 1][board.length - 1].dimensions);
-        }
-
-        if(piece.pieceType.equalsIgnoreCase("k") && indexes.x == board[0].length - 2 && indexes.y == 0)
-        {
-            board[indexes.x - 1][indexes.y] = new Piece(new Point((indexes.x - 1) * board[board[0].length - 1][0].dimensions, indexes.y * board[board[0].length - 1][0].dimensions), board[board[0].length - 1][0].piece, board[board[0].length - 1][0].dimensions, board[board[0].length - 1][0].color, board[board[0].length - 1][0].pieceType);
-            board[board[0].length - 1][0] = new Piece(null, board[board[0].length - 1][0].position, board[board[0].length - 1][0].dimensions);
-        }
-
-        //long castle
-        if(piece.pieceType.equalsIgnoreCase("k") && indexes.x == 2 && indexes.y == board.length - 1)
-        {
-            board[indexes.x + 1][indexes.y] = new Piece(new Point((indexes.x + 1) * board[0][board.length - 1].dimensions, indexes.y * board[0][board.length - 1].dimensions), board[0][board.length - 1].piece, board[0][board.length - 1].dimensions, board[0][board.length - 1].color, board[0][board.length - 1].pieceType);
-            board[0][board.length - 1] = new Piece(null, board[0][board.length - 1].position, board[0][board.length - 1].dimensions);
-        }
-
-        if(piece.pieceType.equalsIgnoreCase("k") && indexes.x == 2 && indexes.y == 0)
-        {
-            board[indexes.x + 1][indexes.y] = new Piece(new Point((indexes.x + 1) * board[0][0].dimensions, indexes.y * board[0][0].dimensions), board[0][0].piece, board[0][0].dimensions, board[0][0].color, board[0][0].pieceType);
-            board[0][0] = new Piece(null, board[0][0].position, board[0][0].dimensions);
-        }
-
-        //fix pawn promotion        
+    private void checkPawnPromotion(Point indexes, Piece piece)
+    {     
         //pawn promotion
         if(piece.pieceType.equalsIgnoreCase("p") && indexes.y == 0)
         {
@@ -285,22 +246,80 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
             }
             while(!answer.equalsIgnoreCase("q") && !answer.equalsIgnoreCase("n") && !answer.equalsIgnoreCase("b") && !answer.equalsIgnoreCase("r"));
 
-            //problem: pawn isnt actually becoming the piece
-            board[indexes.x][indexes.y] = new Piece(new File("Pieces/w" + answer.toLowerCase() + ".png"), board[indexes.x][indexes.y].position, board[indexes.x][indexes.y].dimensions);
+            board[indexes.x][indexes.y] = new Piece(new File("Pieces/w" + answer.toLowerCase() + ".png"), new Point(indexes.x * squareSize, indexes.y * squareSize), squareSize);
             board[indexes.x][indexes.y].amountMoved = newMove;
-        }
 
+            return;
+        }
+        
         if(piece.pieceType.equalsIgnoreCase("p") && indexes.y == board.length - 1)
         {
             int newMove = piece.amountMoved + 1;
             
             String answer = "";
 
-            answer = JOptionPane.showInputDialog(null, "What piece do you want to promote? (q = Queen, b = Bishop, n = Knight, r = Rook)");
+            do
+            {
+                answer = JOptionPane.showInputDialog(this, "What piece do you want to promote? (q = Queen, b = Bishop, n = Knight, r = Rook)");
+            }
+            while(!answer.equalsIgnoreCase("q") && !answer.equalsIgnoreCase("n") && !answer.equalsIgnoreCase("b") && !answer.equalsIgnoreCase("r"));
 
-            //
-            board[indexes.x][indexes.y] = new Piece(new File("Pieces/b" + answer.toLowerCase() + ".png"), new Point(indexes.x * piece.dimensions, indexes.y * piece.dimensions), piece.dimensions);
+            board[indexes.x][indexes.y] = new Piece(new File("Pieces/b" + answer.toLowerCase() + ".png"), new Point(indexes.x * squareSize, indexes.y * squareSize), squareSize);
             board[indexes.x][indexes.y].amountMoved = newMove;
+
+            return;
+        }
+    }
+
+    private void checkSpecialMove(Point indexes, Piece piece)
+    {
+        //en passant
+        if(piece.pieceType.equalsIgnoreCase("p") && indexes.y == 2 && board[indexes.x][indexes.y].piece == null && board[indexes.x][indexes.y + 1].piece != null && board[indexes.x][indexes.y + 1].color.equalsIgnoreCase("b") && board[indexes.x][indexes.y + 1].pieceType.equalsIgnoreCase("p") && board[indexes.x][indexes.y + 1].amountMoved < 2)
+        {
+            board[indexes.x][indexes.y + 1] = new Piece(null, board[indexes.x][indexes.y + 1].position, board[indexes.x][indexes.y + 1].dimensions);
+
+            return;
+        }
+
+        if(piece.pieceType.equalsIgnoreCase("p") && indexes.y == 5 && board[indexes.x][indexes.y].piece == null && board[indexes.x][indexes.y - 1].piece != null && board[indexes.x][indexes.y - 1].color.equalsIgnoreCase("w") && board[indexes.x][indexes.y - 1].pieceType.equalsIgnoreCase("p") && board[indexes.x][indexes.y - 1].amountMoved < 2)
+        {
+            board[indexes.x][indexes.y - 1] = new Piece(null, board[indexes.x][indexes.y - 1].position, board[indexes.x][indexes.y - 1].dimensions);
+
+            return;
+        }
+
+        //short castle
+        if(piece.pieceType.equalsIgnoreCase("k") && indexes.x == board[0].length - 2 && indexes.y == board.length - 1)
+        {
+            board[indexes.x - 1][indexes.y] = new Piece(new Point((indexes.x - 1) * board[board[0].length - 1][board.length - 1].dimensions, indexes.y * board[board[0].length - 1][board.length - 1].dimensions), board[board[0].length - 1][board.length - 1].piece, board[board[0].length - 1][board.length - 1].dimensions, board[board[0].length - 1][board.length - 1].color, board[board[0].length - 1][board.length - 1].pieceType);
+            board[board[0].length - 1][board.length - 1] = new Piece(null, board[board[0].length - 1][board.length - 1].position, board[board[0].length - 1][board.length - 1].dimensions);
+            
+            return;
+        }
+
+        if(piece.pieceType.equalsIgnoreCase("k") && indexes.x == board[0].length - 2 && indexes.y == 0)
+        {
+            board[indexes.x - 1][indexes.y] = new Piece(new Point((indexes.x - 1) * board[board[0].length - 1][0].dimensions, indexes.y * board[board[0].length - 1][0].dimensions), board[board[0].length - 1][0].piece, board[board[0].length - 1][0].dimensions, board[board[0].length - 1][0].color, board[board[0].length - 1][0].pieceType);
+            board[board[0].length - 1][0] = new Piece(null, board[board[0].length - 1][0].position, board[board[0].length - 1][0].dimensions);
+
+            return;
+        }
+
+        //long castle
+        if(piece.pieceType.equalsIgnoreCase("k") && indexes.x == 2 && indexes.y == board.length - 1)
+        {
+            board[indexes.x + 1][indexes.y] = new Piece(new Point((indexes.x + 1) * board[0][board.length - 1].dimensions, indexes.y * board[0][board.length - 1].dimensions), board[0][board.length - 1].piece, board[0][board.length - 1].dimensions, board[0][board.length - 1].color, board[0][board.length - 1].pieceType);
+            board[0][board.length - 1] = new Piece(null, board[0][board.length - 1].position, board[0][board.length - 1].dimensions);
+
+            return;
+        }
+
+        if(piece.pieceType.equalsIgnoreCase("k") && indexes.x == 2 && indexes.y == 0)
+        {
+            board[indexes.x + 1][indexes.y] = new Piece(new Point((indexes.x + 1) * board[0][0].dimensions, indexes.y * board[0][0].dimensions), board[0][0].piece, board[0][0].dimensions, board[0][0].color, board[0][0].pieceType);
+            board[0][0] = new Piece(null, board[0][0].position, board[0][0].dimensions);
+
+            return;
         }
     }
 

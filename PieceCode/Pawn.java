@@ -9,8 +9,6 @@ public class Pawn
     {
         ArrayList<Point> moves = new ArrayList<Point>();
 
-        //add pawn promotion. 
-
         if(piece.color.equalsIgnoreCase("w"))
         {
             //taking another piece
