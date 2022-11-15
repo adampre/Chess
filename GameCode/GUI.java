@@ -25,6 +25,11 @@ public class GUI implements ActionListener
         frame.setVisible(true);
     }
 
+    public void startGame()
+    {
+        boardPanel.gameInit();
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         // TODO Auto-generated method stub

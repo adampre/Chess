@@ -42,6 +42,11 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
 
         gameHasStarted = false;
 
+        gameInit();
+    }
+
+    public void gameInit()
+    {
         initBoard();
 
         gameHasStarted = true;
