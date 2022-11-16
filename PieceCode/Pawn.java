@@ -65,7 +65,7 @@ public class Pawn
             {
                 moves.add(new Point(indexes.x, indexes.y - 1));
 
-                if(!board[indexes.x][indexes.y].hasMoved && board[indexes.x][indexes.y - 2].piece == null)
+                if(board[indexes.x][indexes.y].amountMoved == 0 && board[indexes.x][indexes.y - 2].piece == null)
                 {
                     moves.add(new Point(indexes.x, indexes.y - 2));
                 }
@@ -125,7 +125,7 @@ public class Pawn
             {
                 moves.add(new Point(indexes.x, indexes.y + 1));
 
-                if(board[indexes.x][indexes.y + 2].piece == null && !board[indexes.x][indexes.y].hasMoved)
+                if(board[indexes.x][indexes.y + 2].piece == null && board[indexes.x][indexes.y].amountMoved == 0)
                 {
                     moves.add(new Point(indexes.x, indexes.y + 2));
                 }

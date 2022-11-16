@@ -17,7 +17,6 @@ public class Piece
     public int dimensions;
 
     public boolean isClicked;
-    public boolean hasMoved;
     public int amountMoved;
 
     public Piece(File image, Point point, int dimensions)
@@ -41,7 +40,6 @@ public class Piece
         this.dimensions = dimensions;
 
         isClicked = false;
-        hasMoved = false;
         amountMoved = 0;
     }
 
@@ -60,7 +58,6 @@ public class Piece
 
         isClicked = false;
 
-        hasMoved = true;
         amountMoved = 0;
     }
 }

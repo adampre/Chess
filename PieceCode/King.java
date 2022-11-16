@@ -60,13 +60,13 @@ public class King
             }
 
             //short castle
-            if(!piece.hasMoved && board[indexes.x + 1][indexes.y].piece == null && board[indexes.x + 2][indexes.y].piece == null && board[board[0].length - 1][board.length - 1].piece != null && board[board[0].length - 1][board.length - 1].pieceType.equalsIgnoreCase("r") && !board[board[0].length - 1][board.length - 1].hasMoved && board[board[0].length - 1][board.length - 1].color.equalsIgnoreCase("w"))
+            if(piece.amountMoved == 0 && board[indexes.x + 1][indexes.y].piece == null && board[indexes.x + 2][indexes.y].piece == null && board[board[0].length - 1][board.length - 1].piece != null && board[board[0].length - 1][board.length - 1].pieceType.equalsIgnoreCase("r") && board[board[0].length - 1][board.length - 1].amountMoved == 0 && board[board[0].length - 1][board.length - 1].color.equalsIgnoreCase("w"))
             {
                 moves.add(new Point(indexes.x + 2, indexes.y));
             }
 
             //long castle
-            if(!piece.hasMoved && board[indexes.x - 1][indexes.y].piece == null && board[indexes.x - 2][indexes.y].piece == null && board[indexes.x - 3][indexes.y].piece == null && board[0][board.length - 1].piece != null && board[0][board.length - 1].pieceType.equalsIgnoreCase("r") && !board[0][board.length - 1].hasMoved && board[0][board.length - 1].color.equalsIgnoreCase("w"))
+            if(piece.amountMoved == 0 && board[indexes.x - 1][indexes.y].piece == null && board[indexes.x - 2][indexes.y].piece == null && board[indexes.x - 3][indexes.y].piece == null && board[0][board.length - 1].piece != null && board[0][board.length - 1].pieceType.equalsIgnoreCase("r") && board[0][board.length - 1].amountMoved == 0 && board[0][board.length - 1].color.equalsIgnoreCase("w"))
             {
                 moves.add(new Point(indexes.x - 2, indexes.y));
             }
@@ -122,13 +122,13 @@ public class King
             }
 
             //short castle
-            if(!piece.hasMoved && board[indexes.x + 1][indexes.y].piece == null && board[indexes.x + 2][indexes.y].piece == null && board[board[0].length - 1][0].piece != null && board[board[0].length - 1][0].pieceType.equalsIgnoreCase("r") && !board[board[0].length - 1][0].hasMoved && board[board[0].length - 1][0].color.equalsIgnoreCase("b"))
+            if(piece.amountMoved == 0 && board[indexes.x + 1][indexes.y].piece == null && board[indexes.x + 2][indexes.y].piece == null && board[board[0].length - 1][0].piece != null && board[board[0].length - 1][0].pieceType.equalsIgnoreCase("r") && board[board[0].length - 1][0].amountMoved == 0 && board[board[0].length - 1][0].color.equalsIgnoreCase("b"))
             {
                 moves.add(new Point(indexes.x + 2, indexes.y));
             }
 
             //long castle
-            if(!piece.hasMoved && board[indexes.x - 1][indexes.y].piece == null && board[indexes.x - 2][indexes.y].piece == null && board[indexes.x - 3][indexes.y].piece == null && board[0][0].piece != null && board[0][0].pieceType.equalsIgnoreCase("r") && !board[0][0].hasMoved && board[0][0].color.equalsIgnoreCase("b"))
+            if(piece.amountMoved == 0 && board[indexes.x - 1][indexes.y].piece == null && board[indexes.x - 2][indexes.y].piece == null && board[indexes.x - 3][indexes.y].piece == null && board[0][0].piece != null && board[0][0].pieceType.equalsIgnoreCase("r") && board[0][0].amountMoved == 0 && board[0][0].color.equalsIgnoreCase("b"))
             {
                 moves.add(new Point(indexes.x - 2, indexes.y));
             }
