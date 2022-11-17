@@ -12,7 +12,7 @@ public class GUI implements ActionListener
     {
         frame = new JFrame("Chess");
         frame.setLayout(new BorderLayout());
-        frame.setBounds(0, 0, 800, 800);
+        frame.setBounds(0, 0, 800, 820);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         boardPanel = new BoardPanel(frame.getWidth());

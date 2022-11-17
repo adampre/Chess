@@ -19,15 +19,14 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
     private int squareSize;
 
     private Game game;
-
     private String currentPlayer;
-
     private boolean gameHasStarted;
+
+    private JTextField promptPanel;
     
     public BoardPanel(int dimension)
     {
         board = new Piece[8][8];
-
         colorBoard = new Color[8][8];
 
         darkSquareColor = new Color(169, 122, 101);
@@ -37,10 +36,13 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         squareSize = (dimensions / board.length) - 5;
 
         game = new Game();
-
         currentPlayer = "w";
-
         gameHasStarted = false;
+
+        this.setLayout(new BorderLayout());
+        promptPanel = new JTextField();
+        promptPanel.setEditable(false);
+        this.add(promptPanel, BorderLayout.SOUTH);
 
         gameInit();
     }
@@ -220,6 +222,17 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
                     board[j][i] = new Piece(null, board[j][i].position, board[j][i].dimensions);
 
                     checkPawnPromotion(indexes, board[indexes.x][indexes.y]);
+
+                    if(game.isCheck(board, currentPlayer))
+                    {
+                        game.isInCheck = true;
+
+                        promptPanel.setText(currentPlayer.toUpperCase() + " is currently in check.");
+                    }
+                    else
+                    {
+                        promptPanel.setText("");
+                    }
 
                     switchCurrentPlayer();
 
