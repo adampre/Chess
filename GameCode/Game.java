@@ -19,6 +19,8 @@ public class Game
     private Queen queen;
     private Rook rook;
 
+    public boolean isInCheck;
+
     public Game()
     {
         bishop = new Bishop();
@@ -27,6 +29,8 @@ public class Game
         pawn = new Pawn();
         queen = new Queen();
         rook = new Rook();
+
+        isInCheck = false;
     }
 
     public boolean isLegalMove(Piece piece, Point move, Piece[][] board)
@@ -85,6 +89,8 @@ public class Game
             moves = rook.moves(piece, board, indexes);
         }
 
+        //add code to remove moves that still stay in check or walk into checks
+
         return moves;
     }
 
@@ -102,5 +108,40 @@ public class Game
         }
 
         return null;
+    }
+
+    //passing in current color, checks for opposite
+    private Point indexOfOpponentKing(String color, Piece[][] board)
+    {
+        for(int i = 0; i < board.length; i++)
+        {
+            for(int j = 0; j < board[i].length; j++)
+            {
+                if(board[j][i].piece != null && !board[j][i].color.equalsIgnoreCase(color) && board[j][i].pieceType.equalsIgnoreCase("k"))
+                {
+                    return new Point(j, i);
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public boolean isCheck(Piece[][] board, String currentColor)
+    {
+        ArrayList<Point> moves = new ArrayList<Point>();
+
+        for(int i = 0; i < board.length; i++)
+        {
+            for(int j = 0; j < board[i].length; j++)
+            {
+                if(board[j][i].piece != null)
+                {
+                    moves.addAll(listOfMoves(board[j][i], board));
+                }
+            }
+        }
+
+        return moves.contains(indexOfOpponentKing(currentColor, board));
     }
 }
