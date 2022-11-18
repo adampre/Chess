@@ -89,10 +89,13 @@ public class Game
             moves = rook.moves(piece, board, indexes);
         }
 
-        //add code to remove moves that still stay in check or walk into checks
-
         return moves;
     }
+
+    // public boolean isPinned(Piece[][] board, Point move)
+    // {
+    //  
+    // }
 
     private Point indexOf(Piece piece, Piece[][] board)
     {
@@ -110,14 +113,13 @@ public class Game
         return null;
     }
 
-    //passing in current color, checks for opposite
-    private Point indexOfOpponentKing(String color, Piece[][] board)
+    private Point indexOfOpponentKing(Piece[][] board, String currentColor)
     {
         for(int i = 0; i < board.length; i++)
         {
             for(int j = 0; j < board[i].length; j++)
             {
-                if(board[j][i].piece != null && !board[j][i].color.equalsIgnoreCase(color) && board[j][i].pieceType.equalsIgnoreCase("k"))
+                if(board[j][i].piece != null && board[j][i].pieceType.equalsIgnoreCase("k") && !board[j][i].color.equalsIgnoreCase(currentColor))
                 {
                     return new Point(j, i);
                 }
@@ -142,6 +144,6 @@ public class Game
             }
         }
 
-        return moves.contains(indexOfOpponentKing(currentColor, board));
+        return moves.contains(indexOfOpponentKing(board, currentColor));
     }
 }

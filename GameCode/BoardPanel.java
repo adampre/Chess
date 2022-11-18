@@ -208,8 +208,8 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         {
             for(int j = 0; j < board[i].length; j++)
             {
-                if(board[j][i].piece != null && board[j][i].color.equalsIgnoreCase(currentPlayer) && board[j][i].isClicked && game.isLegalMove(board[j][i], indexes, board))
-                {
+                if(board[j][i].piece != null && board[j][i].color.equalsIgnoreCase(currentPlayer) && board[j][i].isClicked && game.isLegalMove(board[j][i], indexes, board)/* && game.isPinned(board[j][i], indexes, board)*/)
+                {      
                     checkSpecialMove(indexes, board[j][i]);
 
                     int newMove = board[j][i].amountMoved + 1;
@@ -223,18 +223,20 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
 
                     checkPawnPromotion(indexes, board[indexes.x][indexes.y]);
 
+                    switchCurrentPlayer();
+
                     if(game.isCheck(board, currentPlayer))
                     {
                         game.isInCheck = true;
 
+                        switchCurrentPlayer();
                         promptPanel.setText(currentPlayer.toUpperCase() + " is currently in check.");
+                        switchCurrentPlayer();
                     }
                     else
                     {
                         promptPanel.setText("");
                     }
-
-                    switchCurrentPlayer();
 
                     return;
                 }
@@ -290,7 +292,7 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
     }
 
     private void checkSpecialMove(Point indexes, Piece piece)
-    {
+    {      
         //en passant
         if(piece.pieceType.equalsIgnoreCase("p") && indexes.y == 2 && board[indexes.x][indexes.y].piece == null && board[indexes.x][indexes.y + 1].piece != null && board[indexes.x][indexes.y + 1].color.equalsIgnoreCase("b") && board[indexes.x][indexes.y + 1].pieceType.equalsIgnoreCase("p") && board[indexes.x][indexes.y + 1].amountMoved < 2)
         {
