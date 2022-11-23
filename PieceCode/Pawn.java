@@ -9,6 +9,11 @@ public class Pawn
     {
         ArrayList<Point> moves = new ArrayList<Point>();
 
+        if(indexes.y == 0 || indexes.y == 7)
+        {
+            return moves;
+        }
+
         if(piece.color.equalsIgnoreCase("w"))
         {
             //taking another piece

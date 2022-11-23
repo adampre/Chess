@@ -7,6 +7,8 @@ import PieceCode.Piece;
 
 public class BoardPanel extends JPanel implements MouseListener, MouseMotionListener
 {
+    private JTextField promptPanel;
+
     private final String PIECETEMPLATE = "rnbqkbnr/pppppppp/********/********/********/********/PPPPPPPP/RNBQKBNR";
 
     private Color[][] colorBoard;
@@ -19,10 +21,9 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
     private int squareSize;
 
     private Game game;
-    private String currentPlayer;
     private boolean gameHasStarted;
 
-    private JTextField promptPanel;
+    private String currentPlayer;
     
     public BoardPanel(int dimension)
     {
@@ -36,8 +37,9 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         squareSize = (dimensions / board.length) - 5;
 
         game = new Game();
-        currentPlayer = "w";
         gameHasStarted = false;
+
+        currentPlayer = "w";
 
         this.setLayout(new BorderLayout());
         promptPanel = new JTextField();
@@ -62,6 +64,7 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         drawColorBoard(g);
 
         Piece clickedPiece = null;
+        Point indexes = null;
 
         for(int i = 0; i < board.length; i++)
         {
@@ -75,13 +78,14 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
                 if(board[j][i].piece != null && board[j][i].isClicked)
                 {
                     clickedPiece = board[j][i];
+                    indexes = new Point(j, i);
                 }
             }
         }
 
         if(gameHasStarted && clickedPiece != null)
         {
-            drawMoves(g, clickedPiece);
+            drawMoves(g, clickedPiece, indexes);
         }
     }
 
@@ -106,6 +110,11 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
                     colorBoard[j][i] = darkSquareColor;
                 }
 
+                if(board[j][i].piece != null && board[j][i].isClicked)
+                {
+                    g.setColor(Color.GREEN);
+                }
+
                 g.fillRect(j * squareSize, i * squareSize, squareSize, squareSize);
 
                 count++;
@@ -115,7 +124,7 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         }
     }
 
-    private void drawMoves(Graphics g, Piece piece)
+    private void drawMoves(Graphics g, Piece piece, Point indexes)
     {
         ArrayList<Point> moves = game.listOfMoves(piece, board);
 
@@ -123,9 +132,12 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
 
         for(int i = 0; i < moves.size(); i++)
         {
-            g.setColor(Color.GRAY);
+            if(!game.isPinned(board, indexes, moves.get(i)))
+            {
+                g.setColor(Color.GRAY);
 
-            g.fillOval((moves.get(i).x * squareSize) + (squareSize / 3), (moves.get(i).y * squareSize) + (squareSize / 3), squareSize / 3, squareSize / 3);
+                g.fillOval((moves.get(i).x * squareSize) + (squareSize / 3), (moves.get(i).y * squareSize) + (squareSize / 3), squareSize / 3, squareSize / 3);
+            }
         }
     }
 
@@ -208,35 +220,17 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         {
             for(int j = 0; j < board[i].length; j++)
             {
-                if(board[j][i].piece != null && board[j][i].color.equalsIgnoreCase(currentPlayer) && board[j][i].isClicked && game.isLegalMove(board[j][i], indexes, board)/* && game.isPinned(board[j][i], indexes, board)*/)
-                {      
+                if(board[j][i].piece != null && board[j][i].color.equalsIgnoreCase(currentPlayer) && board[j][i].isClicked && game.isLegalMove(board[j][i], indexes, board) && !game.isPinned(board, new Point(j, i), indexes))
+                {     
                     checkSpecialMove(indexes, board[j][i]);
-
-                    int newMove = board[j][i].amountMoved + 1;
-
-                    board[j][i].isClicked = false;
-
-                    board[indexes.x][indexes.y] = new Piece(new Point(indexes.x * board[j][i].dimensions, indexes.y * board[j][i].dimensions), board[j][i].piece, board[j][i].dimensions, board[j][i].color, board[j][i].pieceType);
-                    board[indexes.x][indexes.y].amountMoved = newMove;
-
-                    board[j][i] = new Piece(null, board[j][i].position, board[j][i].dimensions);
+                   
+                    switchPiece(indexes, new Point(j, i));
 
                     checkPawnPromotion(indexes, board[indexes.x][indexes.y]);
 
                     switchCurrentPlayer();
 
-                    if(game.isCheck(board, currentPlayer))
-                    {
-                        game.isInCheck = true;
-
-                        switchCurrentPlayer();
-                        promptPanel.setText(currentPlayer.toUpperCase() + " is currently in check.");
-                        switchCurrentPlayer();
-                    }
-                    else
-                    {
-                        promptPanel.setText("");
-                    }
+                    displayCheck();
 
                     return;
                 }
@@ -249,6 +243,40 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         }
 
         board[indexes.x][indexes.y].isClicked = true;
+    }
+
+    private void switchPiece(Point indexOfClick, Point oldIndex)
+    {
+        int newMove = board[oldIndex.x][oldIndex.y].amountMoved + 1;
+
+        board[oldIndex.x][oldIndex.y].isClicked = false;
+
+        board[indexOfClick.x][indexOfClick.y] = new Piece(new Point(indexOfClick.x * board[oldIndex.x][oldIndex.y].dimensions, indexOfClick.y * board[oldIndex.x][oldIndex.y].dimensions), board[oldIndex.x][oldIndex.y].piece, board[oldIndex.x][oldIndex.y].dimensions, board[oldIndex.x][oldIndex.y].color, board[oldIndex.x][oldIndex.y].pieceType);
+        board[indexOfClick.x][indexOfClick.y].amountMoved = newMove;
+
+        board[oldIndex.x][oldIndex.y] = new Piece(null, board[oldIndex.x][oldIndex.y].position, board[oldIndex.x][oldIndex.y].dimensions);
+    }
+
+    private void displayCheck()
+    {
+        if(game.discoveredCheck(board, currentPlayer))
+        {
+            game.isInCheck = true;
+
+            switchCurrentPlayer();
+            promptPanel.setText(currentPlayer.toUpperCase() + " is currently in check.");
+            switchCurrentPlayer();
+        }
+        else if(game.check(board, currentPlayer))
+        {
+            game.isInCheck = true;
+
+            promptPanel.setText(currentPlayer.toUpperCase() + " is currently in check.");
+        }
+        else
+        {
+            promptPanel.setText("");
+        }
     }
 
     private void checkPawnPromotion(Point indexes, Piece piece)
