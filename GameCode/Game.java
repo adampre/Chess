@@ -81,6 +81,8 @@ public class Game
             moves = rook.moves(piece, board, indexes);
         }
 
+        removePins(board, indexes, moves);
+
         if(isInCheck)
         {
             validateCheckMoves(board, moves, indexes);
@@ -140,6 +142,19 @@ public class Game
                 {
                     return;
                 }
+            }
+        }
+    }
+
+    private void removePins(Piece[][] board, Point indexes, ArrayList<Point> moves)
+    {
+        for(int i = 0; i < moves.size(); i++)
+        {
+            if(isPinned(board, indexes, moves.get(i)))
+            {
+                moves.remove(i);
+
+                i--;
             }
         }
     }

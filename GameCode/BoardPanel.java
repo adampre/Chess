@@ -21,7 +21,6 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
     private int squareSize;
 
     private Game game;
-    private boolean gameHasStarted;
 
     private String currentPlayer;
     
@@ -37,7 +36,6 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         squareSize = (dimensions / board.length) - 5;
 
         game = new Game();
-        gameHasStarted = false;
 
         currentPlayer = "w";
 
@@ -52,8 +50,6 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
     public void gameInit()
     {
         initBoard();
-
-        gameHasStarted = true;
     }
 
     @Override
@@ -83,7 +79,7 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
             }
         }
 
-        if(gameHasStarted && clickedPiece != null)
+        if(clickedPiece != null)
         {
             drawMoves(g, clickedPiece, indexes);
         }
@@ -132,12 +128,9 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
 
         for(int i = 0; i < moves.size(); i++)
         {
-            if(!game.isPinned(board, indexes, moves.get(i)))
-            {
-                g.setColor(Color.GRAY);
+            g.setColor(Color.GRAY);
 
-                g.fillOval((moves.get(i).x * squareSize) + (squareSize / 3), (moves.get(i).y * squareSize) + (squareSize / 3), squareSize / 3, squareSize / 3);
-            }
+            g.fillOval((moves.get(i).x * squareSize) + (squareSize / 3), (moves.get(i).y * squareSize) + (squareSize / 3), squareSize / 3, squareSize / 3);
         }
     }
 
@@ -220,7 +213,7 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         {
             for(int j = 0; j < board[i].length; j++)
             {
-                if(board[j][i].piece != null && board[j][i].color.equalsIgnoreCase(currentPlayer) && board[j][i].isClicked && game.isLegalMove(board[j][i], indexes, board) && !game.isPinned(board, new Point(j, i), indexes))
+                if(board[j][i].piece != null && board[j][i].color.equalsIgnoreCase(currentPlayer) && board[j][i].isClicked && game.isLegalMove(board[j][i], indexes, board))
                 {     
                     udpatePawns();
 
@@ -233,6 +226,11 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
                     switchCurrentPlayer();
 
                     displayCheck();
+
+                    if(game.isInCheck)
+                    {
+                        checkCheckmate();
+                    }
 
                     return;
                 }
@@ -247,6 +245,31 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         board[indexes.x][indexes.y].isClicked = true;
     }
 
+    private void checkCheckmate()
+    {
+        ArrayList<Point> moves = new ArrayList<Point>();
+
+        for(int i = 0; i < board.length; i++)
+        {
+            for(int j = 0; j < board[i].length; j++)
+            {
+                if(board[j][i].piece != null && board[j][i].color.equalsIgnoreCase(currentPlayer))
+                {
+                    moves.addAll(game.listOfMoves(board[j][i], board));
+                }
+            }
+        }
+
+        if(moves.size() == 0)
+        {
+            repaint();
+            
+            JOptionPane.showMessageDialog(null, currentPlayer.toUpperCase() + " has won by checkmate!");
+
+            System.exit(0);
+        }
+    }
+
     private void udpatePawns()
     {
         for(int i = 0; i < board.length; i++)
@@ -255,7 +278,6 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
             {
                 if(board[j][i].piece != null && board[j][i].pieceType.equalsIgnoreCase("p") && board[j][i].amountMoved == 1)
                 {
-                    System.out.println(new Point(j, i));
                     board[j][i].amountMoved++;
                 }
             }
