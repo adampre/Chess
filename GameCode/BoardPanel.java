@@ -106,11 +106,6 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
                     colorBoard[j][i] = darkSquareColor;
                 }
 
-                if(board[j][i].piece != null && board[j][i].isClicked)
-                {
-                    g.setColor(Color.GREEN);
-                }
-
                 g.fillRect(j * squareSize, i * squareSize, squareSize, squareSize);
 
                 count++;
@@ -263,7 +258,7 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         if(moves.size() == 0)
         {
             repaint();
-            
+
             JOptionPane.showMessageDialog(null, currentPlayer.toUpperCase() + " has won by checkmate!");
 
             System.exit(0);
@@ -438,15 +433,12 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
     }
 
     @Override
-    public void mousePressed(MouseEvent e) 
-    {
-        // TODO Auto-generated method stub
-        
+    public void mousePressed(MouseEvent e) {
+
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) 
-    {
+    public void mouseReleased(MouseEvent e) {
         // TODO Auto-generated method stub
         
     }
@@ -468,7 +460,7 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
     @Override
     public void mouseDragged(MouseEvent e) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
