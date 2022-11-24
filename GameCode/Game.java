@@ -81,19 +81,67 @@ public class Game
             moves = rook.moves(piece, board, indexes);
         }
 
-        // if(isInCheck)
-        // {
-        //     validateCheckMoves(moves, piece, board);
-        // }
+        if(isInCheck)
+        {
+            validateCheckMoves(board, moves, indexes);
+        }
 
         return moves;
     }
 
-    private ArrayList<Point> validateCheckMoves(ArrayList<Point> moves, Piece piece, Piece[][] board)
+    private void validateCheckMoves(Piece[][] oldBoard, ArrayList<Point> moves, Point indexes)
     {
-        
+        Piece[][] board = new Piece[oldBoard.length][oldBoard[0].length];
 
-        return moves;
+        for(int i = 0; i < board.length; i++)
+        {
+            for(int j = 0; j < board[i].length; j++)
+            {
+                board[j][i] = new Piece(new Point(j * oldBoard[j][i].dimensions, i * oldBoard[j][i].dimensions), oldBoard[j][i].piece, oldBoard[j][i].dimensions, oldBoard[j][i].color, oldBoard[j][i].pieceType);
+            }
+        }
+
+        for(int i = 0; i < moves.size(); i++)
+        {
+            board[moves.get(i).x][moves.get(i).y] = new Piece(new Point(moves.get(i).x * board[indexes.x][indexes.y].dimensions, moves.get(i).y * board[indexes.x][indexes.y].dimensions), board[indexes.x][indexes.y].piece, board[indexes.x][indexes.y].dimensions, board[indexes.x][indexes.y].color, board[indexes.x][indexes.y].pieceType);
+            board[indexes.x][indexes.y] = new Piece(null, board[indexes.x][indexes.y].position, board[indexes.x][indexes.y].dimensions);
+
+            ArrayList<Point> opponentMoves = new ArrayList<Point>();
+
+            for(int j = 0; j < board.length; j++)
+            {
+                for(int k = 0; k < board[j].length; k++)
+                {
+                    if(board[k][j].piece != null && !board[k][j].color.equalsIgnoreCase(board[moves.get(i).x][moves.get(i).y].color))
+                    {
+                        if(board[k][j].pieceType.equalsIgnoreCase("b"))
+                        {
+                            opponentMoves.addAll(bishop.moves(board[k][j], board, new Point(k, j)));
+                        }
+                        else if(board[k][j].pieceType.equalsIgnoreCase("q"))
+                        {
+                            opponentMoves.addAll(queen.moves(board[k][j], board, new Point(k, j)));
+                        }
+                        else if(board[k][j].pieceType.equalsIgnoreCase("r"))
+                        {
+                            opponentMoves.addAll(rook.moves(board[k][j], board, new Point(k, j)));
+                        }
+                    }                  
+                }
+            }
+
+            if(opponentMoves.contains(indexOfKing(board, board[moves.get(i).x][moves.get(i).y].color)))
+            {
+                moves.remove(i);
+
+                i--;
+
+                if(moves.size() == 0)
+                {
+                    return;
+                }
+            }
+        }
     }
 
     public boolean isPinned(Piece[][] oldBoard, Point indexes, Point move)

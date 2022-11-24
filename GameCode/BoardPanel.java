@@ -275,6 +275,8 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         }
         else
         {
+            game.isInCheck = false;
+
             promptPanel.setText("");
         }
     }
