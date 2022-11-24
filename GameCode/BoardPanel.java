@@ -222,6 +222,8 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
             {
                 if(board[j][i].piece != null && board[j][i].color.equalsIgnoreCase(currentPlayer) && board[j][i].isClicked && game.isLegalMove(board[j][i], indexes, board) && !game.isPinned(board, new Point(j, i), indexes))
                 {     
+                    udpatePawns();
+
                     checkSpecialMove(indexes, board[j][i]);
                    
                     switchPiece(indexes, new Point(j, i));
@@ -243,6 +245,21 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         }
 
         board[indexes.x][indexes.y].isClicked = true;
+    }
+
+    private void udpatePawns()
+    {
+        for(int i = 0; i < board.length; i++)
+        {
+            for(int j = 0; j < board[i].length; j++)
+            {
+                if(board[j][i].piece != null && board[j][i].pieceType.equalsIgnoreCase("p") && board[j][i].amountMoved == 1)
+                {
+                    System.out.println(new Point(j, i));
+                    board[j][i].amountMoved++;
+                }
+            }
+        }
     }
 
     private void switchPiece(Point indexOfClick, Point oldIndex)
