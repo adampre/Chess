@@ -8,14 +8,17 @@ public class GUI implements ActionListener
 
     private BoardPanel boardPanel;
 
+    private final Color BACKGROUND_COLOR = Color.WHITE;
+
     public GUI()
     {
         frame = new JFrame("Chess");
         frame.setLayout(new BorderLayout());
-        frame.setBounds(0, 0, 800, 820);
+        frame.setBounds(0, 0, 1200, 820);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setBackground(BACKGROUND_COLOR);
 
-        boardPanel = new BoardPanel(frame.getWidth());
+        boardPanel = new BoardPanel(frame.getWidth(), frame.getHeight() - 20, BACKGROUND_COLOR);
 
         frame.add(boardPanel, BorderLayout.CENTER);
 

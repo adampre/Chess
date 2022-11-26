@@ -8,6 +8,8 @@ import PieceCode.Piece;
 public class BoardPanel extends JPanel implements MouseListener, MouseMotionListener
 {
     private JTextField promptPanel;
+    //private JTextArea moveDisplay;
+    private DisplayPanel displayPanel;
 
     private final String PIECETEMPLATE = "rnbqkbnr/pppppppp/********/********/********/********/PPPPPPPP/RNBQKBNR";
 
@@ -24,25 +26,30 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
 
     private String currentPlayer;
     
-    public BoardPanel(int dimension)
+    public BoardPanel(int width, int height, Color backgroundColor)
     {
+        this.setLayout(new BorderLayout());
+
         board = new Piece[8][8];
         colorBoard = new Color[8][8];
 
         darkSquareColor = new Color(169, 122, 101);
         lightSquareColor = new Color(241, 217, 192);
 
-        dimensions = dimension;
+        dimensions = height;
         squareSize = (dimensions / board.length) - 5;
 
         game = new Game();
 
-        currentPlayer = "w";
+        currentPlayer = "w";        
 
-        this.setLayout(new BorderLayout());
         promptPanel = new JTextField();
         promptPanel.setEditable(false);
-        this.add(promptPanel, BorderLayout.SOUTH);
+        promptPanel.setBackground(backgroundColor);
+        this.add(promptPanel, BorderLayout.SOUTH);  
+            
+        displayPanel = new DisplayPanel(width, height);
+        this.add(displayPanel, BorderLayout.EAST);
 
         gameInit();
     }
@@ -434,25 +441,24 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
 
     @Override
     public void mousePressed(MouseEvent e) {
+        // TODO Auto-generated method stub
 
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
-    public void mouseEntered(MouseEvent e) 
-    {
+    public void mouseEntered(MouseEvent e) {
         // TODO Auto-generated method stub
         
     }
 
     @Override
-    public void mouseExited(MouseEvent e) 
-    {
+    public void mouseExited(MouseEvent e) {
         // TODO Auto-generated method stub
         
     }
