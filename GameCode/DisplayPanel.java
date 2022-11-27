@@ -7,7 +7,7 @@ public class DisplayPanel extends JPanel
     public TimePanel timePanel;
 
     public JTextArea moveDisplay;
-    public JTextField promptPanel;
+    public JTextField checkDisplay;
 
     public DisplayPanel(int width, int height, Color backgroundColor)
     {
@@ -23,9 +23,9 @@ public class DisplayPanel extends JPanel
         moveDisplay.setPreferredSize(new DimensionUIResource(width - height, height / 2));
         this.add(moveDisplay, BorderLayout.CENTER);
 
-        promptPanel = new JTextField();
-        promptPanel.setEditable(false);
-        promptPanel.setBackground(backgroundColor);
-        this.add(promptPanel, BorderLayout.SOUTH);  
+        checkDisplay = new JTextField();
+        checkDisplay.setEditable(false);
+        checkDisplay.setBackground(backgroundColor);
+        this.add(checkDisplay, BorderLayout.SOUTH);  
     }
 }

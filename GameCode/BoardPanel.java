@@ -7,7 +7,7 @@ import PieceCode.Piece;
 
 public class BoardPanel extends JPanel implements MouseListener, MouseMotionListener
 {
-    private DisplayPanel displayPanel;
+    public DisplayPanel displayPanel;
 
     private final String PIECETEMPLATE = "rnbqkbnr/pppppppp/********/********/********/********/PPPPPPPP/RNBQKBNR";
 
@@ -39,7 +39,8 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
 
         game = new Game();
 
-        currentPlayer = "w";        
+        currentPlayer = "w";     
+        displayPanel.timePanel.currentPlayer = "w";   
 
         displayPanel = new DisplayPanel(width, height, backgroundColor);
         this.add(displayPanel, BorderLayout.EAST);
@@ -298,20 +299,20 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
             game.isInCheck = true;
 
             switchCurrentPlayer();
-            displayPanel.promptPanel.setText(currentPlayer.toUpperCase() + " is currently in check.");
+            displayPanel.checkDisplay.setText(currentPlayer.toUpperCase() + " is currently in check.");
             switchCurrentPlayer();
         }
         else if(game.check(board, currentPlayer))
         {
             game.isInCheck = true;
 
-            displayPanel.promptPanel.setText(currentPlayer.toUpperCase() + " is currently in check.");
+            displayPanel.checkDisplay.setText(currentPlayer.toUpperCase() + " is currently in check.");
         }
         else
         {
             game.isInCheck = false;
 
-            displayPanel.promptPanel.setText("");
+            displayPanel.checkDisplay.setText("");
         }
     }
 
@@ -413,10 +414,14 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         {
             currentPlayer = "b";
 
+            displayPanel.timePanel.currentPlayer = "b";
+
             return;
         }
 
         currentPlayer = "w";
+
+        displayPanel.timePanel.currentPlayer = "w";
     }
 
     @Override

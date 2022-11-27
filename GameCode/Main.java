@@ -2,8 +2,8 @@ public class Main
 {   
     public static void main(String[] args) 
     {
-        GUI gui = new GUI();
+        PromptFrame promptFrame = new PromptFrame();
         
-        gui.startGame();
+        promptFrame.initialize();
     }
 }
