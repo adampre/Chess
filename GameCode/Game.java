@@ -178,6 +178,11 @@ public class Game
 
         ArrayList<Point> moves = new ArrayList<Point>();
 
+        if(board[indexes.x][indexes.y].pieceType.equalsIgnoreCase("p"))
+        {
+            doEnPassant(board, move, board[indexes.x][indexes.y]);
+        }
+
         board[move.x][move.y] = new Piece(new Point(move.x * oldBoard[indexes.x][indexes.y].dimensions, move.y * oldBoard[indexes.x][indexes.y].dimensions), oldBoard[indexes.x][indexes.y].piece, oldBoard[indexes.x][indexes.y].dimensions, oldBoard[indexes.x][indexes.y].color, oldBoard[indexes.x][indexes.y].pieceType);
         board[indexes.x][indexes.y] = new Piece(null, oldBoard[indexes.x][indexes.y].position, oldBoard[indexes.x][indexes.y].dimensions);
 
@@ -204,6 +209,24 @@ public class Game
         }
         
         return moves.contains(indexOfKing(board, board[move.x][move.y].color));
+    }
+
+    private void doEnPassant(Piece[][] board, Point indexes, Piece piece)
+    {
+        //en passant
+        if(piece.pieceType.equalsIgnoreCase("p") && indexes.y == 2 && board[indexes.x][indexes.y].piece == null && board[indexes.x][indexes.y + 1].piece != null && board[indexes.x][indexes.y + 1].color.equalsIgnoreCase("b") && board[indexes.x][indexes.y + 1].pieceType.equalsIgnoreCase("p") && board[indexes.x][indexes.y + 1].amountMoved < 2)
+        {
+            board[indexes.x][indexes.y + 1] = new Piece(null, board[indexes.x][indexes.y + 1].position, board[indexes.x][indexes.y + 1].dimensions);
+
+            return;
+        }
+
+        if(piece.pieceType.equalsIgnoreCase("p") && indexes.y == 5 && board[indexes.x][indexes.y].piece == null && board[indexes.x][indexes.y - 1].piece != null && board[indexes.x][indexes.y - 1].color.equalsIgnoreCase("w") && board[indexes.x][indexes.y - 1].pieceType.equalsIgnoreCase("p") && board[indexes.x][indexes.y - 1].amountMoved < 2)
+        {
+            board[indexes.x][indexes.y - 1] = new Piece(null, board[indexes.x][indexes.y - 1].position, board[indexes.x][indexes.y - 1].dimensions);
+
+            return;
+        }
     }
 
     private Point indexOf(Piece piece, Piece[][] board)

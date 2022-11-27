@@ -14,11 +14,11 @@ public class GUI implements ActionListener
     {
         frame = new JFrame("Chess");
         frame.setLayout(new BorderLayout());
-        frame.setBounds(0, 0, 1200, 820);
+        frame.setBounds(0, 0, 1200, 800);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setBackground(BACKGROUND_COLOR);
 
-        boardPanel = new BoardPanel(frame.getWidth(), frame.getHeight() - 20, BACKGROUND_COLOR);
+        boardPanel = new BoardPanel(frame.getWidth(), frame.getHeight(), BACKGROUND_COLOR);
 
         frame.add(boardPanel, BorderLayout.CENTER);
 

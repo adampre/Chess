@@ -7,8 +7,6 @@ import PieceCode.Piece;
 
 public class BoardPanel extends JPanel implements MouseListener, MouseMotionListener
 {
-    private JTextField promptPanel;
-    //private JTextArea moveDisplay;
     private DisplayPanel displayPanel;
 
     private final String PIECETEMPLATE = "rnbqkbnr/pppppppp/********/********/********/********/PPPPPPPP/RNBQKBNR";
@@ -43,12 +41,7 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
 
         currentPlayer = "w";        
 
-        promptPanel = new JTextField();
-        promptPanel.setEditable(false);
-        promptPanel.setBackground(backgroundColor);
-        this.add(promptPanel, BorderLayout.SOUTH);  
-            
-        displayPanel = new DisplayPanel(width, height);
+        displayPanel = new DisplayPanel(width, height, backgroundColor);
         this.add(displayPanel, BorderLayout.EAST);
 
         gameInit();
@@ -305,20 +298,20 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
             game.isInCheck = true;
 
             switchCurrentPlayer();
-            promptPanel.setText(currentPlayer.toUpperCase() + " is currently in check.");
+            displayPanel.promptPanel.setText(currentPlayer.toUpperCase() + " is currently in check.");
             switchCurrentPlayer();
         }
         else if(game.check(board, currentPlayer))
         {
             game.isInCheck = true;
 
-            promptPanel.setText(currentPlayer.toUpperCase() + " is currently in check.");
+            displayPanel.promptPanel.setText(currentPlayer.toUpperCase() + " is currently in check.");
         }
         else
         {
             game.isInCheck = false;
 
-            promptPanel.setText("");
+            displayPanel.promptPanel.setText("");
         }
     }
 
