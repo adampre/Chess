@@ -88,7 +88,34 @@ public class Game
             validateCheckMoves(board, moves, indexes);
         }
 
+        if(piece.pieceType.equalsIgnoreCase("k"))
+        {
+            validateCastling(moves, board, indexes);
+        }
+
         return moves;
+    }
+
+    private void validateCastling(ArrayList<Point> moves, Piece[][] oldBoard, Point indexes)
+    {
+        // if(moves.contains(new Point(indexes.x - 2, indexes.y)) || moves.contains(new Point(indexes.x + 2, indexes.y)))
+        // {
+        //     return;
+        // }
+
+        // String currentColor = oldBoard[indexes.x][indexes.y].color;
+
+        // Piece[][] board = new Piece[oldBoard.length][oldBoard[0].length];
+
+        // for(int i = 0; i < board.length; i++)
+        // {
+        //     for(int j = 0; j < board[i].length; j++)
+        //     {
+        //         board[j][i] = new Piece(new Point(j * oldBoard[j][i].dimensions, i * oldBoard[j][i].dimensions), oldBoard[j][i].piece, oldBoard[j][i].dimensions, oldBoard[j][i].color, oldBoard[j][i].pieceType);
+        //     }
+        // }
+
+        // for()
     }
 
     private void validateCheckMoves(Piece[][] oldBoard, ArrayList<Point> moves, Point indexes)
