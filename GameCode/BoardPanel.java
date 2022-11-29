@@ -44,6 +44,9 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         displayPanel = new DisplayPanel(width, height, backgroundColor);
         this.add(displayPanel, BorderLayout.EAST);
 
+        displayPanel.checkDisplay.setText(" ");
+        displayPanel.moveDisplay.setText("asjkdflkajsdlkfja;sdlkjf;alsdkjf;laksjd;flakjsd;flakjsdf");
+
         gameInit();
     }
 
@@ -311,7 +314,7 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         {
             game.isInCheck = false;
 
-            displayPanel.checkDisplay.setText("");
+            displayPanel.checkDisplay.setText(" ");
         }
     }
 
