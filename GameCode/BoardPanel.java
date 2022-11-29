@@ -40,7 +40,6 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         game = new Game();
 
         currentPlayer = "w";     
-        displayPanel.timePanel.currentPlayer = "w";   
 
         displayPanel = new DisplayPanel(width, height, backgroundColor);
         this.add(displayPanel, BorderLayout.EAST);
@@ -414,14 +413,10 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         {
             currentPlayer = "b";
 
-            displayPanel.timePanel.currentPlayer = "b";
-
             return;
         }
 
         currentPlayer = "w";
-
-        displayPanel.timePanel.currentPlayer = "w";
     }
 
     @Override

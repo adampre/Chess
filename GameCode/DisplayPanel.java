@@ -4,8 +4,6 @@ import java.awt.*;
 
 public class DisplayPanel extends JPanel
 {
-    public TimePanel timePanel;
-
     public JTextArea moveDisplay;
     public JTextField checkDisplay;
 
@@ -14,8 +12,6 @@ public class DisplayPanel extends JPanel
         this.setLayout(new BorderLayout());
         this.setPreferredSize(new DimensionUIResource(width - height, height));
         this.setBackground(Color.GREEN);
-
-        timePanel = new TimePanel();
 
         moveDisplay = new JTextArea();
         moveDisplay.setEditable(false);

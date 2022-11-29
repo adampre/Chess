@@ -96,26 +96,58 @@ public class Game
         return moves;
     }
 
-    private void validateCastling(ArrayList<Point> moves, Piece[][] oldBoard, Point indexes)
+    private void validateCastling(ArrayList<Point> moves, Piece[][] board, Point indexes)
     {
-        // if(moves.contains(new Point(indexes.x - 2, indexes.y)) || moves.contains(new Point(indexes.x + 2, indexes.y)))
-        // {
-        //     return;
-        // }
+        if(!moves.contains(new Point(indexes.x - 2, indexes.y)) && !moves.contains(new Point(indexes.x + 2, indexes.y)))
+        {
+            return;
+        }
 
-        // String currentColor = oldBoard[indexes.x][indexes.y].color;
+        ArrayList<Point> opponentMoves = new ArrayList<Point>();
 
-        // Piece[][] board = new Piece[oldBoard.length][oldBoard[0].length];
+        for(int i = 0; i < board.length; i++)
+        {
+            for(int j = 0; j < board[i].length; j++)
+            {
+                if(board[j][i].piece != null && !board[j][i].color.equalsIgnoreCase(board[indexes.x][indexes.y].color))
+                {
+                    if(board[j][i].pieceType.equalsIgnoreCase("b"))
+                    {
+                        opponentMoves.addAll(bishop.moves(board[j][i], board, new Point(j, i)));
+                    }
+                    else if(board[j][i].pieceType.equalsIgnoreCase("q"))
+                    {
+                        opponentMoves.addAll(queen.moves(board[j][i], board, new Point(j, i)));
+                    }
+                    else if(board[j][i].pieceType.equalsIgnoreCase("r"))
+                    {
+                        opponentMoves.addAll(rook.moves(board[j][i], board, new Point(j, i)));
+                    }
+                    else if(board[j][i].pieceType.equalsIgnoreCase("n"))
+                    {
+                        opponentMoves.addAll(queen.moves(board[j][i], board, new Point(j, i)));
+                    }
+                    else if(board[j][i].pieceType.equalsIgnoreCase("k"))
+                    {
+                        opponentMoves.addAll(rook.moves(board[j][i], board, new Point(j, i)));
+                    }
+                    else if(board[j][i].pieceType.equalsIgnoreCase("p"))
+                    {
+                        opponentMoves.addAll(rook.moves(board[j][i], board, new Point(j, i)));
+                    }
+                }                  
+            }
+        }
 
-        // for(int i = 0; i < board.length; i++)
-        // {
-        //     for(int j = 0; j < board[i].length; j++)
-        //     {
-        //         board[j][i] = new Piece(new Point(j * oldBoard[j][i].dimensions, i * oldBoard[j][i].dimensions), oldBoard[j][i].piece, oldBoard[j][i].dimensions, oldBoard[j][i].color, oldBoard[j][i].pieceType);
-        //     }
-        // }
+        if(opponentMoves.contains(new Point(indexes.x - 1, indexes.y)) || opponentMoves.contains(new Point(indexes.x - 2, indexes.y))) 
+        {
+            moves.remove(new Point(indexes.x - 2, indexes.y));
+        }
 
-        // for()
+        if(opponentMoves.contains(new Point(indexes.x + 1, indexes.y)) || opponentMoves.contains(new Point(indexes.x + 2, indexes.y))) 
+        {
+            moves.remove(new Point(indexes.x + 2, indexes.y));
+        }
     }
 
     private void validateCheckMoves(Piece[][] oldBoard, ArrayList<Point> moves, Point indexes)
