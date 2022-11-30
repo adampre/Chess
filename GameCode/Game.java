@@ -187,6 +187,18 @@ public class Game
                         {
                             opponentMoves.addAll(rook.moves(board[k][j], board, new Point(k, j)));
                         }
+                        else if(board[k][j].pieceType.equalsIgnoreCase("p"))
+                        {
+                            opponentMoves.addAll(pawn.moves(board[k][j], board, new Point(k, j)));
+                        }
+                        else if(board[k][j].pieceType.equalsIgnoreCase("n"))
+                        {
+                            opponentMoves.addAll(knight.moves(board[k][j], board, new Point(k, j)));
+                        }
+                        else if(board[k][j].pieceType.equalsIgnoreCase("k"))
+                        {
+                            opponentMoves.addAll(king.moves(board[k][j], board, new Point(k, j)));
+                        }
                     }                  
                 }
             }

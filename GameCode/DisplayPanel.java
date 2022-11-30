@@ -1,15 +1,21 @@
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
 import javax.swing.plaf.DimensionUIResource;
 import javax.swing.plaf.FontUIResource;
-import java.awt.*;
 
-public class DisplayPanel extends JPanel
+public class DisplayPanel extends JPanel implements ActionListener
 {
     public JTextArea moveDisplay;
     public JLabel checkDisplay;
 
+    public ArrayList<Move> moves;
+
     public DisplayPanel(int width, int height, Color backgroundColor)
     {
+        moves = new ArrayList<Move>();
+
         this.setLayout(new BorderLayout());
         this.setPreferredSize(new DimensionUIResource(width - height, height));
         this.setBackground(backgroundColor);
@@ -17,8 +23,9 @@ public class DisplayPanel extends JPanel
         moveDisplay = new JTextArea();
         moveDisplay.setEditable(false);
         moveDisplay.setFont(new FontUIResource(moveDisplay.getFont().getName(), moveDisplay.getFont().getStyle(), 20));
+        moveDisplay.setPreferredSize(new DimensionUIResource(width - height, height - 83));
         moveDisplay.setBackground(backgroundColor);
-        moveDisplay.setPreferredSize(new DimensionUIResource(width - height, height / 2));
+        moveDisplay.setLineWrap(true);
         this.add(moveDisplay, BorderLayout.NORTH);
 
         checkDisplay = new JLabel();
@@ -26,5 +33,30 @@ public class DisplayPanel extends JPanel
         checkDisplay.setBackground(backgroundColor);
         checkDisplay.setOpaque(true);
         this.add(checkDisplay, BorderLayout.SOUTH);  
+    }
+
+    public void updateMoveDisplay()
+    {   
+        String displayedMoves = "";
+
+        A: for(int i = 0; i < moves.size(); i++)
+        {
+            displayedMoves += ((i / 2) + 1) + ". " + moves.get(i).getMoveNotation() + " ";
+
+            i++;
+
+            if(i >= moves.size()) break A;
+
+            displayedMoves += moves.get(i).getMoveNotation() + " ";
+        }
+
+        moveDisplay.setText(displayedMoves);  
+    }
+
+    //ADD AND IMPLEMENT UNDO BUTTON
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // TODO Auto-generated method stub
+        
     }
 }

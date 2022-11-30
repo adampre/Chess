@@ -45,8 +45,7 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         this.add(displayPanel, BorderLayout.EAST);
 
         displayPanel.checkDisplay.setText(" ");
-        displayPanel.moveDisplay.setText("asjkdflkajsdlkfja;sdlkjf;alsdkjf;laksjd;flakjsd;flakjsdf");
-
+        
         gameInit();
     }
 
@@ -262,6 +261,10 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         {
             repaint();
 
+            displayPanel.moveDisplay.setText(displayPanel.moveDisplay.getText() + "#");
+
+            switchCurrentPlayer();
+
             JOptionPane.showMessageDialog(null, currentPlayer.toUpperCase() + " has won by checkmate!");
 
             System.exit(0);
@@ -292,12 +295,17 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         board[indexOfClick.x][indexOfClick.y].amountMoved = newMove;
 
         board[oldIndex.x][oldIndex.y] = new Piece(null, board[oldIndex.x][oldIndex.y].position, board[oldIndex.x][oldIndex.y].dimensions);
+
+        displayPanel.moves.add(new Move(board[indexOfClick.x][indexOfClick.y], oldIndex, indexOfClick));
+
+        displayPanel.updateMoveDisplay();
     }
 
     private void displayCheck()
     {
         if(game.discoveredCheck(board, currentPlayer))
         {
+            System.out.println("asdf");
             game.isInCheck = true;
 
             switchCurrentPlayer();

@@ -1,8 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
-public class GUI implements ActionListener
+public class GUI
 {
     private JFrame frame;
 
@@ -29,11 +28,5 @@ public class GUI implements ActionListener
     public void startGame()
     {
         boardPanel.gameInit();
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
-        
     }
 }
