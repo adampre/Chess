@@ -83,7 +83,7 @@ public class Game
 
         removePins(board, indexes, moves);
 
-        if(isInCheck)
+        if(isInCheck || piece.pieceType.equalsIgnoreCase("k"))
         {
             validateCheckMoves(board, moves, indexes);
         }
@@ -150,21 +150,20 @@ public class Game
         }
     }
 
-    //BUG: moves that move a king INTO a check after being checked. ex. checking a king with a pawn, a legal move shown is the king moving into attacking square of another pawn
     private void validateCheckMoves(Piece[][] oldBoard, ArrayList<Point> moves, Point indexes)
     {
-        Piece[][] board = new Piece[oldBoard.length][oldBoard[0].length];
-
-        for(int i = 0; i < board.length; i++)
-        {
-            for(int j = 0; j < board[i].length; j++)
-            {
-                board[j][i] = new Piece(new Point(j * oldBoard[j][i].dimensions, i * oldBoard[j][i].dimensions), oldBoard[j][i].piece, oldBoard[j][i].dimensions, oldBoard[j][i].color, oldBoard[j][i].pieceType);
-            }
-        }
-
         for(int i = 0; i < moves.size(); i++)
         {
+            Piece[][] board = new Piece[oldBoard.length][oldBoard[0].length];
+
+            for(int x = 0; x < board.length; x++)
+            {
+                for(int j = 0; j < board[x].length; j++)
+                {
+                    board[j][x] = new Piece(new Point(j * oldBoard[j][x].dimensions, i * oldBoard[j][x].dimensions), oldBoard[j][x].piece, oldBoard[j][x].dimensions, oldBoard[j][x].color, oldBoard[j][x].pieceType);
+                }
+            }
+
             board[moves.get(i).x][moves.get(i).y] = new Piece(new Point(moves.get(i).x * board[indexes.x][indexes.y].dimensions, moves.get(i).y * board[indexes.x][indexes.y].dimensions), board[indexes.x][indexes.y].piece, board[indexes.x][indexes.y].dimensions, board[indexes.x][indexes.y].color, board[indexes.x][indexes.y].pieceType);
             board[indexes.x][indexes.y] = new Piece(null, board[indexes.x][indexes.y].position, board[indexes.x][indexes.y].dimensions);
 
