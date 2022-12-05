@@ -150,6 +150,7 @@ public class Game
         }
     }
 
+    //BUG: moves that move a king INTO a check after being checked. ex. checking a king with a pawn, a legal move shown is the king moving into attacking square of another pawn
     private void validateCheckMoves(Piece[][] oldBoard, ArrayList<Point> moves, Point indexes)
     {
         Piece[][] board = new Piece[oldBoard.length][oldBoard[0].length];

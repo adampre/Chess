@@ -62,7 +62,6 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         drawColorBoard(g);
 
         Piece clickedPiece = null;
-        Point indexes = null;
 
         for(int i = 0; i < board.length; i++)
         {
@@ -76,14 +75,13 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
                 if(board[j][i].piece != null && board[j][i].isClicked)
                 {
                     clickedPiece = board[j][i];
-                    indexes = new Point(j, i);
                 }
             }
         }
 
         if(clickedPiece != null)
         {
-            drawMoves(g, clickedPiece, indexes);
+            drawMoves(g, clickedPiece);
         }
     }
 
@@ -117,7 +115,7 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         }
     }
 
-    private void drawMoves(Graphics g, Piece piece, Point indexes)
+    private void drawMoves(Graphics g, Piece piece)
     {
         ArrayList<Point> moves = game.listOfMoves(piece, board);
 
@@ -305,7 +303,6 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
     {
         if(game.discoveredCheck(board, currentPlayer))
         {
-            System.out.println("asdf");
             game.isInCheck = true;
 
             switchCurrentPlayer();

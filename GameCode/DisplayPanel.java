@@ -53,7 +53,6 @@ public class DisplayPanel extends JPanel implements ActionListener
         moveDisplay.setText(displayedMoves);  
     }
 
-    //ADD AND IMPLEMENT UNDO BUTTON
     @Override
     public void actionPerformed(ActionEvent e) {
         // TODO Auto-generated method stub
