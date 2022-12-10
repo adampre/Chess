@@ -233,9 +233,9 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
             {
                 if(board[j][i].piece != null && board[j][i].color.equalsIgnoreCase(currentPlayer) && board[j][i].isClicked && game.isLegalMove(board[j][i], indexes, board))
                 {     
-                    udpatePawns();
-
                     checkSpecialMove(indexes, board[j][i]);
+
+                    udpatePawns();
                    
                     switchPiece(indexes, new Point(j, i));
 
