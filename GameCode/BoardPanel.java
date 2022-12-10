@@ -9,7 +9,7 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
 {
     public DisplayPanel displayPanel;
 
-    private final String PIECETEMPLATE = "rnbqkbnr/pppppppp/********/********/********/********/PPPPPPPP/RNBQKBNR";
+    private final String PIECETEMPLATE = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
     private Color[][] colorBoard;
     private Color darkSquareColor;
@@ -39,7 +39,7 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
 
         game = new Game();
 
-        currentPlayer = "w";     
+        currentPlayer = PIECETEMPLATE.substring(PIECETEMPLATE.indexOf(" ") + 1, PIECETEMPLATE.indexOf(" ") + 2);    
 
         displayPanel = new DisplayPanel(width, height, backgroundColor);
         this.add(displayPanel, BorderLayout.EAST);
@@ -129,27 +129,50 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         }
     }
 
+    private boolean isNumber(String number)
+    {
+        if(number == null) return false;
+
+        try
+        {
+            Integer.parseInt(number);
+        }
+        catch(NumberFormatException e)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     private void initBoard()
     {
-        int count = 0;
+        for(int i = 0, index = 0; i < PIECETEMPLATE.indexOf(" "); i++, index++)
+        {
+            if(PIECETEMPLATE.substring(i, i + 1).equalsIgnoreCase("/")) 
+            {
+                i++;
+            }
+
+            if(isNumber(PIECETEMPLATE.substring(i, i + 1)))
+            {
+                index += Integer.parseInt(PIECETEMPLATE.substring(i, i + 1)) - 1;
+            }
+            else
+            {
+                board[index % board[0].length][index / board.length] = new Piece(new File(getFileName(PIECETEMPLATE.substring(i, i + 1))), new Point((index % board[0].length) * squareSize, (index / board.length) * squareSize), squareSize);
+            }
+        }
 
         for(int i = 0; i < board.length; i++)
         {
             for(int j = 0; j < board[i].length; j++)
             {
-                if(getFileName(PIECETEMPLATE.substring(count, count + 1)) != null)
-                {
-                    board[j][i] = new Piece(new File(getFileName(PIECETEMPLATE.substring(count, count + 1))), new Point(j * squareSize, i * squareSize), squareSize);
-                }
-                else 
+                if(board[j][i] == null)
                 {
                     board[j][i] = new Piece(null, new Point(j * squareSize, i * squareSize), squareSize);
-                } 
-
-                count++;
+                }
             }
-
-            count++;
         }
 
         repaint();
