@@ -23,6 +23,9 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
     private Game game;
 
     private String currentPlayer;
+
+    private int halfMoves;
+    private int fullMoves;
     
     public BoardPanel(int width, int height, Color backgroundColor)
     {
@@ -45,13 +48,38 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         this.add(displayPanel, BorderLayout.EAST);
 
         displayPanel.checkDisplay.setText(" ");
-        
+
+        halfMoves = Integer.parseInt(PIECETEMPLATE.substring(PIECETEMPLATE.indexOf(" ", PIECETEMPLATE.indexOf(" ", PIECETEMPLATE.indexOf(" ") + 3) + 1) + 1, PIECETEMPLATE.indexOf(" ", PIECETEMPLATE.indexOf(" ", PIECETEMPLATE.indexOf(" ", PIECETEMPLATE.indexOf(" ") + 3) + 1) + 1)));
+        fullMoves = Integer.parseInt(PIECETEMPLATE.substring(PIECETEMPLATE.indexOf(" ", PIECETEMPLATE.indexOf(" ", PIECETEMPLATE.indexOf(" ", PIECETEMPLATE.indexOf(" ") + 3) + 1) + 1) + 1, PIECETEMPLATE.length()));
+
         gameInit();
     }
 
     public void gameInit()
     {
         initBoard();
+
+        int indexAfterCastle = PIECETEMPLATE.indexOf(" ", PIECETEMPLATE.indexOf(" ") + 3) + 1;
+
+        initEnPassant(indexAfterCastle);
+    }
+
+    private void initEnPassant(int indexAfterCastle)
+    {
+        if(PIECETEMPLATE.substring(indexAfterCastle, indexAfterCastle + 1).equalsIgnoreCase("-")) return;
+
+        String files = "abcdefgh";
+
+        switch(Integer.parseInt(PIECETEMPLATE.substring(indexAfterCastle + 1, indexAfterCastle + 2)))
+        {
+            case 3:
+                board[files.indexOf(PIECETEMPLATE.substring(indexAfterCastle, indexAfterCastle + 1))][4].amountMoved = 1;
+                return;
+
+            case 6:
+                board[files.indexOf(PIECETEMPLATE.substring(indexAfterCastle, indexAfterCastle + 1))][3].amountMoved = 1;
+                return;
+        }
     }
 
     @Override
@@ -129,22 +157,6 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         }
     }
 
-    private boolean isNumber(String number)
-    {
-        if(number == null) return false;
-
-        try
-        {
-            Integer.parseInt(number);
-        }
-        catch(NumberFormatException e)
-        {
-            return false;
-        }
-
-        return true;
-    }
-
     private void initBoard()
     {
         for(int i = 0, index = 0; i < PIECETEMPLATE.indexOf(" "); i++, index++)
@@ -154,11 +166,11 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
                 i++;
             }
 
-            if(isNumber(PIECETEMPLATE.substring(i, i + 1)))
+            try
             {
                 index += Integer.parseInt(PIECETEMPLATE.substring(i, i + 1)) - 1;
             }
-            else
+            catch(NumberFormatException e)
             {
                 board[index % board[0].length][index / board.length] = new Piece(new File(getFileName(PIECETEMPLATE.substring(i, i + 1))), new Point((index % board[0].length) * squareSize, (index / board.length) * squareSize), squareSize);
             }
@@ -174,6 +186,8 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
                 }
             }
         }
+
+
 
         repaint();
     }
@@ -233,6 +247,8 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
             {
                 if(board[j][i].piece != null && board[j][i].color.equalsIgnoreCase(currentPlayer) && board[j][i].isClicked && game.isLegalMove(board[j][i], indexes, board))
                 {     
+                    updateHalfMove(new Point(j, i), indexes);
+
                     checkSpecialMove(indexes, board[j][i]);
 
                     udpatePawns();
@@ -245,10 +261,7 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
 
                     displayCheck();
 
-                    if(game.isInCheck)
-                    {
-                        checkCheckmate();
-                    }
+                    checkEndOfGame();
 
                     return;
                 }
@@ -263,8 +276,31 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         board[indexes.x][indexes.y].isClicked = true;
     }
 
-    private void checkCheckmate()
+    private void updateHalfMove(Point oldIndex, Point newIndex)
     {
+        if(board[newIndex.x][newIndex.y].piece != null || board[oldIndex.x][oldIndex.y].pieceType.equalsIgnoreCase("p"))
+        {
+            halfMoves = 0;
+
+            return;
+        }
+
+        halfMoves++;
+    }
+
+    private void checkEndOfGame()
+    {
+        if(halfMoves >= 50) 
+        {
+            repaint();
+
+            JOptionPane.showMessageDialog(null, "Draw by halfmove.");
+
+            System.out.println("Number of moves: " + fullMoves);
+
+            System.exit(0);
+        }
+
         ArrayList<Point> moves = new ArrayList<Point>();
 
         for(int i = 0; i < board.length; i++)
@@ -280,16 +316,29 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
 
         if(moves.size() == 0)
         {
-            repaint();
+            if(game.isInCheck)
+            {
+                repaint();
 
-            displayPanel.moveDisplay.setText(displayPanel.moveDisplay.getText() + "#");
+                displayPanel.moveDisplay.setText(displayPanel.moveDisplay.getText() + "#");
 
-            switchCurrentPlayer();
+                switchCurrentPlayer();
 
-            JOptionPane.showMessageDialog(null, currentPlayer.toUpperCase() + " has won by checkmate!");
+                JOptionPane.showMessageDialog(null, currentPlayer.toUpperCase() + " has won by checkmate!");
+            }
+            else
+            {
+                repaint();
+
+                displayPanel.moveDisplay.setText(displayPanel.moveDisplay.getText() + "$");
+
+                JOptionPane.showMessageDialog(null, "Stalemate");
+            }
+
+            System.out.println("Number of moves: " + fullMoves);
 
             System.exit(0);
-        }
+        }    
     }
 
     private void udpatePawns()
@@ -448,6 +497,8 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
         }
 
         currentPlayer = "w";
+
+        fullMoves++;
     }
 
     @Override
@@ -460,6 +511,10 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
             switchIsClicked(indexes);
 
             repaint();
+        }
+        else
+        {
+            throw new NullPointerException("Click invalid.");
         }
     }
 
