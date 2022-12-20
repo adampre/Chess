@@ -7,7 +7,9 @@ import javax.swing.plaf.FontUIResource;
 
 public class DisplayPanel extends JPanel implements ActionListener
 {
+    public JScrollPane scrollPane;
     public JTextArea moveDisplay;
+
     public JLabel checkDisplay;
 
     public ArrayList<Move> moves;
@@ -23,10 +25,15 @@ public class DisplayPanel extends JPanel implements ActionListener
         moveDisplay = new JTextArea();
         moveDisplay.setEditable(false);
         moveDisplay.setFont(new FontUIResource(moveDisplay.getFont().getName(), moveDisplay.getFont().getStyle(), 20));
-        moveDisplay.setPreferredSize(new DimensionUIResource(width - height, height - 83));
         moveDisplay.setBackground(backgroundColor);
         moveDisplay.setLineWrap(true);
-        this.add(moveDisplay, BorderLayout.NORTH);
+        moveDisplay.setWrapStyleWord(true);
+
+        scrollPane = new JScrollPane(moveDisplay);
+        scrollPane.setPreferredSize(new DimensionUIResource(width - height, 500));
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        this.add(scrollPane, BorderLayout.NORTH);
 
         checkDisplay = new JLabel();
         checkDisplay.setFont(new FontUIResource(checkDisplay.getFont().getName(), checkDisplay.getFont().getStyle(), 34));
