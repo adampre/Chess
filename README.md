@@ -22,6 +22,7 @@ The game is won by placing the opponent's king in a position where it cannot esc
 **ADDITIONAL INFORMATION**
 
 I have added additional mechanics, such as printing out moves using [Algebraic Chess Notation](https://en.wikipedia.org/wiki/Algebraic_notation_(chess)), as well as being able to start at a position given a FEN[^1] string. 
+
 ---
 **DISCLAIMER**
 
