@@ -59,9 +59,65 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
     {
         initBoard();
 
-        int indexAfterCastle = PIECETEMPLATE.indexOf(" ", PIECETEMPLATE.indexOf(" ") + 3) + 1;
+        int indexBeforeCastle = PIECETEMPLATE.indexOf(" ") + 3;
+        int indexAfterCastle = PIECETEMPLATE.indexOf(" ", PIECETEMPLATE.indexOf(" ") + 3);
 
-        initEnPassant(indexAfterCastle);
+        initCastling(indexBeforeCastle, indexAfterCastle);
+
+        initEnPassant(indexAfterCastle + 1);
+    }
+
+    private void initCastling(int indexBeforeCastle, int indexAfterCastle)
+    {
+        if(indexAfterCastle - indexBeforeCastle == 4) return;
+
+        String nonCastling = "KQkq";
+
+        for(int i = indexBeforeCastle; i < indexAfterCastle; i++)
+        {
+            switch(PIECETEMPLATE.charAt(i))
+            {
+                case 'K':
+                nonCastling = nonCastling.replaceFirst("K", "");
+                break;
+
+                case 'Q': 
+                nonCastling = nonCastling.replaceFirst("Q", "");
+                break;
+
+                case 'k': 
+                nonCastling = nonCastling.replaceFirst("k", "");
+                break;
+
+                case 'q': 
+                nonCastling = nonCastling.replaceFirst("q", "");
+                break;
+            }
+        }
+
+        System.out.println(nonCastling);
+
+        for(int i = 0; i < nonCastling.length(); i++)
+        {
+            switch(nonCastling.charAt(i))
+            {
+                case 'K':
+                board[board[0].length - 1][board.length - 1].amountMoved++;
+                break;
+
+                case 'Q': 
+                board[0][board.length - 1].amountMoved++;
+                break;
+
+                case 'k': 
+                board[board[0].length - 1][0].amountMoved++;
+                break;
+
+                case 'q': 
+                board[0][0].amountMoved++;
+                break;
+            }
+        }
     }
 
     private void initEnPassant(int indexAfterCastle)
