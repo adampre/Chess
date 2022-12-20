@@ -103,6 +103,13 @@ public class Game
             return;
         }
 
+        if(isInCheck)
+        {
+            moves.remove(new Point(indexes.x - 2, indexes.y));
+
+            moves.remove(new Point(indexes.x + 2, indexes.y));
+        }
+
         ArrayList<Point> opponentMoves = new ArrayList<Point>();
 
         for(int i = 0; i < board.length; i++)
