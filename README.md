@@ -15,7 +15,6 @@ Each piece has its own unique movements. The king can move one square in any dir
 The game begins with the white player making the first move, and then players alternate turns. A player can "castle" by moving the king two squares towards a rook on the player's first rank, then moving the rook to the square over which the king crossed.
 
 There are also several special moves in chess called "promotions," "en passant," and "pawn promotion." When a pawn advances to the eighth rank, it is promoted to a queen, rook, bishop, or knight of the same color. If an opponent's pawn advances two squares from its starting position, and lands immediately adjacent to an enemy pawn, the enemy pawn has the option of capturing the pawn "en passant" (in passing) as if it had only advanced one square. A pawn can also be promoted to any piece when it advances to the opponent's eighth rank.
-
 The game is won by placing the opponent's king in a position where it cannot escape capture (checkmate). The game can also end in a draw if the players agree to it, or if there are not enough pieces on the board to force a checkmate (called a "stalemate").
 ---
 **ADDITIONAL INFORMATION**
