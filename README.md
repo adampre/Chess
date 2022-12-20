@@ -4,6 +4,7 @@
 **INTRODUCTION**
 
 This was meant to be a fun coding project. I enjoy playing chess, so I thought it would be fun to try and create it. I have trie to code all of the mechanics.  If I have missed anything, please post an issue. 
+
 ---
 **RULES**
 *[FIDE Laws of Chess](https://www.fide.com/FIDE/handbook/LawsOfChess.pdf)*
