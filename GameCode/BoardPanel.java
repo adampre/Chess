@@ -568,10 +568,6 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
 
             repaint();
         }
-        else
-        {
-            throw new NullPointerException("Click invalid.");
-        }
     }
 
     @Override
