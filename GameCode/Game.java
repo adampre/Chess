@@ -1,14 +1,7 @@
 import java.awt.*;
 import java.util.ArrayList;
 
-import PieceCode.Piece;
-
-import PieceCode.Pawn;
-import PieceCode.Knight;
-import PieceCode.Bishop;
-import PieceCode.Rook;
-import PieceCode.King;
-import PieceCode.Queen;
+import PieceCode.*;
 
 public class Game
 {
