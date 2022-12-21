@@ -5,7 +5,7 @@ public class GUI
 {
     private JFrame frame;
 
-    public BoardPanel boardPanel;
+    private BoardPanel boardPanel;
 
     public GUI(Color backgroundColor)
     {
@@ -16,7 +16,6 @@ public class GUI
         frame.setBackground(backgroundColor);
 
         boardPanel = new BoardPanel(frame.getWidth(), frame.getHeight(), backgroundColor);
-
         frame.add(boardPanel, BorderLayout.CENTER);
 
         frame.addMouseListener(boardPanel);
