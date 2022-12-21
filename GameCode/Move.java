@@ -34,13 +34,13 @@ public class Move
                 //long castle
                 if(newPosition.x == oldPosition.x - 2)
                 {
-                    return "O-O-O";
+                    return "0-0-0";
                 }
 
                 //short castle
                 if(newPosition.x == oldPosition.x + 2)
                 {
-                    return "O-O";
+                    return "0-0";
                 }
             }
 
