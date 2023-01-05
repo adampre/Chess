@@ -95,8 +95,6 @@ public class BoardPanel extends JPanel implements MouseListener, MouseMotionList
             }
         }
 
-        System.out.println(nonCastling);
-
         for(int i = 0; i < nonCastling.length(); i++)
         {
             switch(nonCastling.charAt(i))
